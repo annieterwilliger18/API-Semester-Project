@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<style> 
+	.btn{border:1px solid white; padding:5px;display:inline-block} 
+    mark {
+        background-color: lightblue;
+        color: grey;
+    }
+    body{
+        background-color: whitesmoke;
+    }
+	</style>
+</head>
+<body>
+
+	<div class="container">
+
+	</table> 
+    <br><br>
+    <h1><mark>Public Design Commission Outdoor Public Art Inventory</mark></h1>
+    <br>
+    <p><b>The Public Design Commission (PDC) has general and curatorial supervision over works of art belonging to the City and its approval is required for any permanent installation of artwork on City-owned property as well as any relocation, conservation, or removal of City-owned artworks. In September 2019, the PDC completed the first phase of a public art inventory. As part of this project, two archivists were hired to compile an inventory of City-owned outdoor artworks, monuments, memorials, and historic markers using PDC records and existing public data. This inventory is still in progress and PDC staff will continue to update this data set as new artworks are installed, new information is uncovered, or previously existing artworks are discovered, removed, or relocated.
+   </b></p>
+    <br>
+    <h2><mark>Most Popular ArtWork Types 2:</mark></h2>
+    <br>
+    <p><b>With this graph you will be able to see the most popular ArtWork Types within the second classification. There are 5 different categories shown and the chart below visualizes the distribution throughout the specific types.</b></p>
+    <br>
+    <p><input type="button" class="btn btn-primary" id="btn_1" value="Most Popular ArtWork Type 2"></p>
+    <div id="textDisplayed3"> </div>
+    <form id="form-chart">
+        <input type="hidden" name="cht" value="pc"  />
+        <input type="hidden" name="chtt" value="Most Popular Types of Artwork"  />
+        <input type='hidden' name='chs' value='600x600' />
+        <input type="hidden" name="chxt" value="y,x" />
+        <input type="hidden" name="chl" value="Artwork|Artwork/Memorial|Artwork/Monument|Monument/Memorial|Marker|">
+        <input type="hidden" name="chxr" value="0,0,1">
+        <input type='hidden' name='chd' id= "data" value=""/>
+    </form>
+    <img id="img" src="" alt="Static Chart"/>
+    <br><br>
+    <h4><mark>ArtWork Type 2 Key</mark></h4>
+    <br>
+    <p><input type="button" class="btn btn-primary" id="btn_2" value="Sum of ArtWork Type 2"></p>
+    
+    <table id="table-location1" class="table table-bordered">
+        <tr><th>ArtWork Type 2</th></tr>
+        
+    </table>
+    <br><br>
+
+    <h2><mark>Most Popular ArtWork Types 1:</mark></h2>
+    <br>
+    <p><b>After looking at the first pie chart within the next pie chart I chose the most frequently recorded ArtWork Types within ArtWork Type 1</b></p>
+    <p><input type="button" class="btn btn-primary" id="btn_3" value="Most Popular ArtWork Type 1"></p>
+    <div id="textDisplayed4"> </div>
+    <form id="form-chart1">
+        <input type="hidden" name="cht" value="pc"  />
+        <input type="hidden" name="chtt" value="Most Popular Types of Artwork 1"  />
+        <input type='hidden' name='chs' value='600x600' />
+        <input type="hidden" name="chxt" value="y,x" />
+        <input type="hidden" name="chl" value="Statue|Plaque|Sculpture|Bas-relief|Plaque, plinth|Fountain|Stele|Flagstaff base, plaque|Installation|Bas-relief roundel|Flagstaff|">
+        <input type='hidden' name='chd' id= "data2" value=""/>
+    </form>
+    <img id="img2" src="" alt="Static Chart"/>
+    <br><br>
+    <h4><mark>ArtWork Type 1 Key</mark></h4>
+    <br>
+    <p><input type="button" class="btn btn-primary" id="btn_4" value="Sum of ArtWork Type 1"></p>
+    
+    <table id="table-location2" class="table table-bordered">
+        <tr><th>ArtWork Type 1</th></tr>
+        
+    </table>
+	</div> 
+</body>
+<script>
+"use strict";
+function displayMostPopularArtTypes(){
+    let artwork = 0 
+    let artwork_memorial=0
+    let artwork_monument = 0 
+    let monument_memorial= 0 
+    let marker = 0 
+    let data ="";
+
+    $.getJSON("https://data.cityofnewyork.us/resource/2pg3-gcaa.json",function(result){
+        console.log(result);
+        for(let i=0;i<result.length;i++){
+            if(result[i]["artwork_type2"]== "Artwork"){
+                artwork += 1
+            }
+            if(result[i]["artwork_type2"]== "Artwork/Memorial"){
+                artwork_memorial += 1
+            }
+            if(result[i]["artwork_type2"]== "Artwork/Monument"){
+                artwork_monument += 1
+            }
+            if(result[i]["artwork_type2"]== "Monument/Memorial"){
+                monument_memorial += 1
+            }
+            if(result[i]["artwork_type2"]== "Marker"){
+                marker += 1
+            }
+   
+        }
+        //return artwork, artwork_memorial, artwork_monument, monument_memorial, marker
+
+        //$('#textDisplayed3').val(artwork, artwork_memorial, artwork_monument, monument_memorial, marker)
+
+        console.log(artwork);
+        console.log(artwork_memorial);
+        console.log(artwork_monument);
+        console.log(monument_memorial);
+        console.log(marker);
+        let sum = (artwork+artwork_memorial+artwork_monument+monument_memorial+marker)
+        artwork = artwork / sum
+        artwork_memorial = artwork_memorial / sum 
+        artwork_monument = artwork_monument / sum 
+        monument_memorial = monument_memorial / sum 
+        marker = marker / sum
+        
+
+        data = "t:" + artwork + "," + artwork_memorial + "," + artwork_monument + "," + monument_memorial + "," + marker;
+        $("#data").val(data);
+        var serialized_data = $("#form-chart").serialize();
+        console.log(serialized_data);
+        $("#img").attr("src", "https://image-charts.com/chart?" + serialized_data);
+        console.log("https://image-charts.com/chart?" + serialized_data);
+        /*$.post("https://image-charts.com/chart", serialized_data, function(result){
+           console.log(result);
+           $("#img").attr("src", result);
+        });*/
+    });
+
+}
+
+function displaySumArtWorkType2(){
+    let artwork = 219
+    let artwork_memorial = 7
+    let artwork_monument = 15
+    let monument_memorial = 465
+    let marker = 75
+
+    $("#table-location1").append("<tr>" + "<td>" + "Artwork" +  "</td>" +"<td>" + artwork + "</td>" + "</tr>" + "<tr>" + "<td>" + "Artwork/Memorial" +  "</td>" +"<td>" + artwork_memorial+ "</td>" + "</tr>"+"<tr>" + "<td>" + "Artwork/Monument" +  "</td>" +"<td>" + artwork_monument + "</td>" + "</tr>"+"<tr>" + "<td>" + "Monument/Memorial" +  "</td>" +"<td>" + monument_memorial+ "</td>" + "</tr>" +"<tr>" + "<td>" + "Marker" +  "</td>" +"<td>" + marker+ "</td>" + "</tr>");
+
+}
+
+function displayMostPopularArtWorkTypes(){
+    let statue=0
+    let plaque = 0 
+    let sculpture= 0 
+    let bas_relief = 0 
+    let plaque_plinth = 0
+    let fountain = 0
+    let stele = 0
+    let flagstaff_base_plaque = 0 
+    let installation = 0
+    let bas_relief_roundel = 0
+    let flagstaff_base = 0
+    let other = 0
+    let data2 = "";
+
+    $.getJSON("https://data.cityofnewyork.us/resource/2pg3-gcaa.json",function(result){
+        console.log(result);
+        for(let i=0;i<result.length;i++){
+            if(result[i]["artwork_type1"]== "Statue"){
+                statue += 1
+            }
+            if(result[i]["artwork_type1"]== "Plaque"){
+                plaque += 1
+            }
+            if(result[i]["artwork_type1"]== "Sculpture"){
+                sculpture += 1
+            }
+            if(result[i]["artwork_type1"]== "Bas-relief"){
+                bas_relief += 1
+            }
+            if(result[i]["artwork_type1"]== "Plaque, plinth"){
+                plaque_plinth += 1
+            }
+            if(result[i]["artwork_type1"]== "Fountain"){
+                fountain += 1
+            }
+            if(result[i]["artwork_type1"]== "Stele"){
+                stele += 1
+            }
+            if(result[i]["artwork_type1"]== "Flagstaff base, plaque"){
+                flagstaff_base_plaque += 1
+            }
+            if(result[i]["artwork_type1"]== "Installation"){
+                installation+= 1
+            }
+            if(result[i]["artwork_type1"]== "Bas-relief roundel"){
+                bas_relief_roundel += 1
+            }
+            if(result[i]["artwork_type1"]== "Flagstaff base"){
+                flagstaff_base += 1
+            }
+            
+        console.log(statue);
+        console.log(plaque);
+        console.log(sculpture);
+        console.log(bas_relief);
+        console.log(plaque_plinth);
+        console.log(fountain);
+        console.log(stele);
+        console.log(flagstaff_base_plaque);
+        console.log(installation);
+        console.log(bas_relief_roundel);
+        console.log(flagstaff_base);
+        
+    
+        }        
+        data2 = "t:" + statue + "," + plaque + "," + sculpture + "," + bas_relief + "," + plaque_plinth + "," + fountain + "," + stele + "," + flagstaff_base_plaque +  "," + installation + "," + bas_relief_roundel + "," + flagstaff_base;
+        $("#data2").val(data2);
+        var serialized_data = $("#form-chart1").serialize();
+        console.log(serialized_data);
+        $("#img2").attr("src", "https://image-charts.com/chart?" + serialized_data);
+        console.log("https://image-charts.com/chart?" + serialized_data);
+        /*$.post("https://image-charts.com/chart", serialized_data, function(result){
+           console.log(result);
+           $("#img").attr("src", result);
+        });*/
+    });
+
+}
+function displaySumArtWorkType1(){
+    let statue = 137
+    let plaque = 113
+    let sculpture = 84
+    let bas_relief = 41
+    let plaque_plinth = 30
+    let fountain = 29
+    let stele = 27 
+    let flagstaff_base_plaque = 27 
+    let installation = 24 
+    let bas_relief_roundel = 14 
+    let flagstaff_base = 14
+    
+
+    $("#table-location2").append("<tr>" + "<td>" + "Statue" +  "</td>" +"<td>" + statue+ "</td>" + "</tr>" + "<tr>" + "<td>" + "Plaque" +  "</td>" +"<td>" + plaque+ "</td>" + "</tr>"+"<tr>" + "<td>" + "Sculpture" +  "</td>" +"<td>" + sculpture + "</td>" + "</tr>"+"<tr>" + "<td>" + "Bas-Relief" +  "</td>" + "<td>" + bas_relief+ "</td>" + "</tr>" + "<tr>" + "<td>" + "Plaque-Plinth" +  "</td>" +"<td>" + plaque_plinth+ "</td>" + "</tr>" + "<tr>" + "<td>" + "Fountain" +  "</td>" +"<td>" + fountain + "</td>" + "</tr>"+ "<tr>" + "<td>" + "Stele" +  "</td>" +"<td>" + stele+ "</td>" + "</tr>"+ "<tr>" + "<td>" + "Flagstaff base, Plaque" +  "</td>" +"<td>" + flagstaff_base_plaque+ "</td>" + "</tr>"+ "<tr>" + "<td>" + "Installation" +  "</td>" +"<td>" + installation+ "</td>" + "</tr>"+ "<tr>" + "<td>" + "Bas-Relief Roundel" +  "</td>" +"<td>" + bas_relief_roundel + "</td>" + "</tr>"+ "<tr>" + "<td>" + "Flagstaff-Base" +  "</td>" +"<td>" + flagstaff_base+ "</td>" + "</tr>");
+
+}
+    
+/////////////////////////////////////////////////////////////////////////////////
+// Insert your code between here and the previous comment block.  Do not alter //
+// any code in any other part of this file.                                    //
+/////////////////////////////////////////////////////////////////////////////////
+
+$('#btn_1').click(function(){
+	displayMostPopularArtTypes();
+})
+$('#btn_2').click(function(){
+	displaySumArtWorkType2 ();
+})
+$('#btn_3').click(function(){
+	displayMostPopularArtWorkTypes ();
+})
+$('#btn_4').click(function(){
+	displaySumArtWorkType1 ();
+})
+
+</script>
+</html>
